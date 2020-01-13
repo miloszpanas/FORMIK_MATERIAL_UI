@@ -1,11 +1,18 @@
 import React from "react";
-import { Formik, Field } from "formik";
+import { Formik, Field, useField } from "formik";
 import {
   TextField,
   Button,
   Checkbox,
+  Radio,
   FormControlLabel
 } from "@material-ui/core";
+
+// CUSTOM COMPONENT OVER MATERIAL UI COMPONENT
+const MyRadio = ({ label, ...props }) => {
+  const [field] = useField(props);
+  return <FormControlLabel {...field} control={<Radio />} label={label}/>;
+}
 
 function App() {
   return (
@@ -33,6 +40,8 @@ function App() {
         {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
           <form onSubmit={handleSubmit} style={{ margin: "20px" }}>
             {/* you can use Field provided by Formik to simplify things, like so */}
+
+            {/* TEXT INPUTS, ONE ORIGINAL FROM MATERIAL UI, ONE WITH FORMIK FIELD ============ */}
             <Field
               name="firstName"
               placeholder="first name"
@@ -49,10 +58,13 @@ function App() {
               onBlur={handleBlur}
             />
             <br />
+            {/* SINGLE CHECKBOX WITH LABEL =========== */}
             <FormControlLabel
               control={<Field name="isTall" type="checkbox" as={Checkbox} />}
               label="isTall"
             />
+            {/* ARRAY OF CHECKBOXES ============*/}
+
             <div>cookies:</div>
             <Field
               name="cookies"
@@ -73,6 +85,13 @@ function App() {
               as={Checkbox}
             ></Field>
             <br />
+            <div>
+              Yogurt
+              <Field name="yogurt" type="radio" value="peach" as={Radio}/>
+              {/* CUSTOM ELEMENT DEFINED AT THE START OF CODE */}
+              <MyRadio name="yogurt" type="radio" value="blueberries" label="Blueberries"/>
+              <MyRadio name="yogurt" type="radio" value="strawberry" label="Strawberry" />
+            </div>
             <Button type="submit">Submit</Button>
             <pre>{JSON.stringify(values, null, 2)}</pre>
           </form>
