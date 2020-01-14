@@ -7,8 +7,18 @@ import {
   Radio,
   FormControlLabel
 } from "@material-ui/core";
+import * as yup from "yup";
 
-// CUSTOM COMPONENT OVER MATERIAL UI COMPONENT
+// YUP SCHEMA
+const validationSchema = yup.object({
+  middleName: yup
+    .string()
+    .required()
+    .max(10)
+});
+// =============================================
+
+// CUSTOM COMPONENTS OVER MATERIAL UI COMPONENT
 const MyRadio = ({ label, ...props }) => {
   const [field] = useField(props);
   return <FormControlLabel {...field} control={<Radio />} label={label} />;
@@ -34,18 +44,20 @@ function App() {
         initialValues={{
           firstName: "",
           lastName: "",
+          middleName: "",
           isTall: true,
           cookies: [],
           yogurt: ""
         }}
-        validate={values => {
-          const errors = {};
+        validationSchema={validationSchema}
+        // validate={values => {
+        //   const errors = {};
 
-          if (!values.firstName.length) {
-            errors.firstName = "this field is required"
-          }
-          return errors;
-        }}
+        //   if (!values.firstName.length) {
+        //     errors.firstName = "this field is required";
+        //   }
+        //   return errors;
+        // }}
         onSubmit={(data, { setSubmitting }) => {
           setTimeout(() => {
             // setSubmitting needs to be the result of a promise
@@ -59,7 +71,14 @@ function App() {
           }, 1100);
         }}
       >
-        {({ values, errors, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+        {({
+          values,
+          errors,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting
+        }) => (
           <form onSubmit={handleSubmit} style={{ margin: "20px" }}>
             {/* you can use Field provided by Formik to simplify things, like so */}
 
@@ -77,6 +96,12 @@ function App() {
               value={values.lastName}
               onChange={handleChange}
               onBlur={handleBlur}
+            />
+            <br />
+            <MyTextField
+              name="middleName"
+              placeholder="middle name"
+              type="input"
             />
             <br />
             {/* SINGLE CHECKBOX WITH LABEL =========== */}
