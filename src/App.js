@@ -59,7 +59,7 @@ function App() {
           }, 1100);
         }}
       >
-        {({ values, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
+        {({ values, errors, handleChange, handleBlur, handleSubmit, isSubmitting }) => (
           <form onSubmit={handleSubmit} style={{ margin: "20px" }}>
             {/* you can use Field provided by Formik to simplify things, like so */}
 
@@ -131,6 +131,7 @@ function App() {
             </div>
             <Button type="submit">Submit</Button>
             <pre>{JSON.stringify(values, null, 2)}</pre>
+            <pre>{JSON.stringify(errors, null, 2)}</pre>
           </form>
         )}
       </Formik>
