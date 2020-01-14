@@ -11,8 +11,21 @@ import {
 // CUSTOM COMPONENT OVER MATERIAL UI COMPONENT
 const MyRadio = ({ label, ...props }) => {
   const [field] = useField(props);
-  return <FormControlLabel {...field} control={<Radio />} label={label}/>;
-}
+  return <FormControlLabel {...field} control={<Radio />} label={label} />;
+};
+
+const MyTextField = ({ placeholder, ...props }) => {
+  const [field, meta] = useField(props);
+  const errorText = meta.error && meta.touched ? meta.error : "";
+  return (
+    <TextField
+      placeholder={placeholder}
+      {...field}
+      helperText={errorText}
+      error={!!errorText}
+    />
+  );
+};
 
 function App() {
   return (
@@ -22,7 +35,16 @@ function App() {
           firstName: "",
           lastName: "",
           isTall: true,
-          cookies: []
+          cookies: [],
+          yogurt: ""
+        }}
+        validate={values => {
+          const errors = {};
+
+          if (!values.firstName.length) {
+            errors.firstName = "this field is required"
+          }
+          return errors;
         }}
         onSubmit={(data, { setSubmitting }) => {
           setTimeout(() => {
@@ -42,11 +64,10 @@ function App() {
             {/* you can use Field provided by Formik to simplify things, like so */}
 
             {/* TEXT INPUTS, ONE ORIGINAL FROM MATERIAL UI, ONE WITH FORMIK FIELD ============ */}
-            <Field
+            <MyTextField
               name="firstName"
               placeholder="first name"
               type="input"
-              as={TextField}
             />
             <br />
             <TextField
@@ -87,10 +108,26 @@ function App() {
             <br />
             <div>
               Yogurt
-              <Field name="yogurt" type="radio" value="peach" as={Radio}/>
+              <br />
+              <FormControlLabel
+                control={
+                  <Field name="yogurt" type="radio" value="peach" as={Radio} />
+                }
+                label="Peach"
+              />
               {/* CUSTOM ELEMENT DEFINED AT THE START OF CODE */}
-              <MyRadio name="yogurt" type="radio" value="blueberries" label="Blueberries"/>
-              <MyRadio name="yogurt" type="radio" value="strawberry" label="Strawberry" />
+              <MyRadio
+                name="yogurt"
+                type="radio"
+                value="blueberries"
+                label="Blueberries"
+              />
+              <MyRadio
+                name="yogurt"
+                type="radio"
+                value="strawberry"
+                label="Strawberry"
+              />
             </div>
             <Button type="submit">Submit</Button>
             <pre>{JSON.stringify(values, null, 2)}</pre>
